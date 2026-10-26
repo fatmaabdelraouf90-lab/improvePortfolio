@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatma Abdelraouf | Front-End Developer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Poppins:wght@300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a1a;
+            --bg2: #12122a;
+            --purple: #8b5cf6;
+            --purple-light: #a78bfa;
+            --cyan: #06b6d4;
+            --cyan-light: #22d3ee;
+            --pink: #ec4899;
+            --text: #e5e7eb;
+            --text-dim: #9ca3af;
+            --card: rgba(139, 92, 246, 0.08);
+            --border: rgba(139, 92, 246, 0.25);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ===== Animated Background ===== */
+        .bg-anim {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.25), transparent 50%),
+                radial-gradient(circle at 80% 60%, rgba(6, 182, 212, 0.2), transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(236, 72, 153, 0.15), transparent 50%);
+            animation: bgMove 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgMove {
+            0% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            100% {
+                transform: scale(1.2) rotate(5deg);
+            }
+        }
+
+        /* Floating blobs */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob1 {
+            width: 400px;
+            height: 400px;
+            background: var(--purple);
+            top: -100px;
+            right: -100px;
+        }
+
+        .blob2 {
+            width: 350px;
+            height: 350px;
+            background: var(--cyan);
+            bottom: 10%;
+            left: -100px;
+            animation-delay: -5s;
+        }
+
+        .blob3 {
+            width: 300px;
+            height: 300px;
+            background: var(--pink);
+            top: 40%;
+            right: 20%;
+            animation-delay: -10s;
+            opacity: 0.25;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-50px, 50px) scale(0.9);
+            }
+        }
+
+        /* ===== Custom Cursor ===== */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--cyan);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, background 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--purple-light);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.05s;
+        }
+
+        .cursor.hover {
+            transform: scale(2);
+            background: rgba(6, 182, 212, 0.2);
+        }
+
+        /* ===== Navbar ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(15px);
+            background: rgba(10, 10, 26, 0.6);
+            border-bottom: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        nav.scrolled {
+            border-bottom: 1px solid var(--border);
+            padding: 12px 6%;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--purple-light), var(--cyan-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .burger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* ===== Hero ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 6%;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 18px;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            background: var(--card);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.2s forwards;
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.4s forwards;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--purple-light) 0%, var(--cyan-light) 50%, var(--pink) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .hero .role {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            color: var(--cyan-light);
+            margin-bottom: 20px;
+            font-weight: 600;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.6s forwards;
+        }
+
+        .hero .role .typed {
+            border-left: 2px solid var(--cyan);
+            padding-left: 5px;
+        }
+
+        .hero p.desc {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            max-width: 620px;
+            margin-bottom: 35px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.8s forwards;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.8s 1s forwards;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple), var(--cyan));
+            color: #fff;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--cyan);
+            color: var(--cyan-light);
+            transform: translateY(-4px);
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-ind {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            animation: fadeUp 1s 1.5s forwards;
+            opacity: 0;
+        }
+
+        .mouse {
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--border);
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .mouse::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--cyan);
+            border-radius: 2px;
+            animation: scrollDot 1.5s infinite;
+        }
+
+        @keyframes scrollDot {
+            0% {
+                top: 8px;
+                opacity: 1;
+            }
+
+            100% {
+                top: 22px;
+                opacity: 0;
+            }
+        }
+
+        /* ===== Sections ===== */
+        section {
+            padding: 100px 6%;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .section-title span {
+            background: linear-gradient(135deg, var(--purple-light), var(--cyan-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-sub {
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 60px;
+            font-size: 1rem;
+        }
+
+        /* Reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== About ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .about-visual {
+            position: relative;
+        }
+
+        .about-card {
+            aspect-ratio: 1;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            position: relative;
+            overflow: hidden;
+            animation: floatY 4s ease-in-out infinite;
+        }
+
+        @keyframes floatY {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .about-card::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 0deg, transparent, var(--purple), transparent 30%);
+            animation: rotate 4s linear infinite;
+        }
+
+        .about-card {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2));
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            animation: floatY 4s ease-in-out infinite;
+            max-width: 380px;
+            margin: 0 auto;
+            padding: 8px;
+        }
+
+        @keyframes floatY {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        /* الحلقة الملونة الدوارة */
+        .about-card::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: conic-gradient(from 0deg, transparent, var(--purple), var(--cyan), transparent 30%);
+            animation: rotate 4s linear infinite;
+            z-index: 0;
+        }
+
+        /* الإطار الداخلي */
+        .about-card::after {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border-radius: 50%;
+            background: var(--bg2);
+            z-index: 1;
+        }
+
+        /* الصورة نفسها */
+        .about-card img {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--bg2);
+            transition: transform 0.5s ease;
+        }
+
+        .about-card:hover img {
+            transform: scale(1.08);
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .about-text p {
+            color: var(--text-dim);
+            margin-bottom: 18px;
+            font-size: 1.02rem;
+        }
+
+        .about-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .tag {
+            padding: 8px 18px;
+            border-radius: 50px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* ===== Skills ===== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .skill-card {
+            padding: 30px;
+            border-radius: 20px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15), transparent 60%);
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--purple);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+        }
+
+        .skill-card:hover::before {
+            opacity: 1;
+        }
+
+        .skill-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 18px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.3));
+            border: 1px solid var(--border);
+        }
+
+        .skill-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .skill-card p {
+            color: var(--text-dim);
+            font-size: 0.92rem;
+            margin-bottom: 15px;
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .skill-bar span {
+            display: block;
+            height: 100%;
+            background: linear-gradient(90deg, var(--purple), var(--cyan));
+            border-radius: 10px;
+            width: 0;
+            transition: width 1.5s ease;
+        }
+
+        /* ===== Projects ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--card);
+            border: 1px solid var(--border);
+            transition: 0.4s;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--cyan);
+            box-shadow: 0 25px 50px rgba(6, 182, 212, 0.25);
+        }
+
+        .project-img {
+            height: 200px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.4), rgba(6, 182, 212, 0.4));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(10, 10, 26, 0.9));
+        }
+
+        .project-body {
+            padding: 25px;
+        }
+
+        .project-body h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .project-body p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 18px;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .tech-tag {
+            padding: 5px 14px;
+            border-radius: 50px;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            color: var(--cyan-light);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--purple-light);
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .project-link:hover {
+            color: var(--cyan-light);
+            gap: 12px;
+        }
+
+        /* ===== Contact ===== */
+        .contact-wrap {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-card {
+            padding: 50px 40px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(6, 182, 212, 0.1));
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(139, 92, 246, 0.3), transparent 30%);
+            animation: rotate 6s linear infinite;
+            z-index: -1;
+        }
+
+        .contact-card>* {
+            position: relative;
+        }
+
+        .contact-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .contact-card p {
+            color: var(--text-dim);
+            margin-bottom: 30px;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 26px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .contact-link:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--purple);
+            transform: translateY(-4px);
+        }
+
+        /* ===== Footer ===== */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        footer .heart {
+            color: var(--pink);
+            animation: beat 1s infinite;
+            display: inline-block;
+        }
+
+        @keyframes beat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.3);
+            }
+        }
+
+        /* ===== Progress Bar Top ===== */
+        .progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--purple), var(--cyan), var(--pink));
+            width: 0;
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .burger {
+                display: flex;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .about-card {
+                max-width: 280px;
+                margin: 0 auto;
+            }
+
+            .cursor,
+            .cursor-dot {
+                display: none;
+            }
+
+            section {
+                padding: 70px 5%;
+            }
+
+            .contact-card {
+                padding: 35px 20px;
+            }
+        }
+
+        .nav-links.open {
+            display: flex;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            left: 0;
+            flex-direction: column;
+            background: var(--bg2);
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            gap: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-anim"></div>
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+
+    <div class="progress" id="progress"></div>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- Navbar -->
+    <nav id="nav">
+        <div class="logo">Fatma.dev</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#about">عني</a></li>
+            <li><a href="#skills">المهارات</a></li>
+            <li><a href="#projects">المشاريع</a></li>
+            <li><a href="#contact">تواصل</a></li>
+        </ul>
+        <div class="burger" id="burger">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="dot"></span>
+                متاحة للعمل الحر
+            </div>
+            <h1>أهلاً، أنا <span class="gradient">فاطمة عبد الرؤوف</span></h1>
+            <div class="role">
+                <span class="typed" id="typed"></span>
+            </div>
+            <p class="desc">
+                طالبة علوم الحاسب بجامعة القاهرة، شغوفة بتطوير الويب وتصميم صفحات المواقع.
+                أهتم بتنظيم الكود والتفاصيل، وأسعى دائمًا لتقديم تجارب رقمية واضحة وسهلة الاستخدام.
+            </p>
+            <div class="hero-btns">
+                <a href="#projects" class="btn btn-primary">شاهدي أعمالي ✨</a>
+                <a href="#contact" class="btn btn-outline">تواصلي معي 💬</a>
+            </div>
+        </div>
+        <div class="scroll-ind">
+            <div class="mouse"></div>
+            <span>انزلي للأسفل</span>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <h2 class="section-title reveal">عن <span>نفسي</span></h2>
+        <p class="section-sub reveal">تعرّفي عليّ أكثر</p>
+        <div class="about-grid">
+            <div class="about-visual reveal">
+                <div class="about-card">
+                    <img src="images/profile.jpg" alt="Fatma Abdelraouf">
+                </div>
+                <div class="about-text reveal">
+                    <h3>Front-End Developer 🚀</h3>
+                    <p>
+                        أنا فاطمة عبد الرؤوف، طالبة علوم الحاسب بجامعة القاهرة، مهتمة بتطوير الويب
+                        وتصميم صفحات المواقع بطريقة عصرية وسهلة الاستخدام.
+                    </p>
+                    <p>
+                        أسعى باستمرار إلى تطوير مهاراتي من خلال التعلم والتطبيق العملي، ويهمني
+                        تنظيم الكود والاهتمام بأدق التفاصيل لإنشاء صفحات ويب واضحة وتجربة مستخدم ممتازة.
+                    </p>
+                    <p>
+                        أحرص على فهم متطلبات المشروع جيدًا، والتواصل بوضوح مع العميل، والالتزام بالمواعيد،
+                        وتقديم عمل يلبّي احتياجاته بأعلى جودة.
+                    </p>
+                    <div class="about-tags">
+                        <span class="tag">💡 مبدعة</span>
+                        <span class="tag">⏰ ملتزمة</span>
+                        <span class="tag">🎯 دقيقة</span>
+                        <span class="tag">🤝 متعاونة</span>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills">
+        <h2 class="section-title reveal">مهاراتي <span>التقنية</span></h2>
+        <p class="section-sub reveal">الأدوات اللي بشتغل بيها</p>
+        <div class="skills-grid">
+            <div class="skill-card reveal">
+                <div class="skill-icon">🌐</div>
+                <h4>HTML</h4>
+                <p>بناء هيكل صفحات الويب وتنظيم المحتوى بشكل دلالي وسليم.</p>
+                <div class="skill-bar"><span data-width="90%"></span></div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🎨</div>
+                <h4>CSS</h4>
+                <p>تنسيق الصفحات وتحسين المظهر والتجاوب مع مختلف أحجام الشاشات.</p>
+                <div class="skill-bar"><span data-width="85%"></span></div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">⚡</div>
+                <h4>JavaScript</h4>
+                <p>إضافة التفاعلات والوظائف الديناميكية لصفحات الويب.</p>
+                <div class="skill-bar"><span data-width="75%"></span></div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🅱️</div>
+                <h4>Bootstrap</h4>
+                <p>بناء واجهات سريعة ومتجاوبة باستخدام إطار عمل Bootstrap.</p>
+                <div class="skill-bar"><span data-width="80%"></span></div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">☕</div>
+                <h4>Java</h4>
+                <p>برمجة تطبيقات بلغة Java مع تطبيق مبادئ OOP.</p>
+                <div class="skill-bar"><span data-width="70%"></span></div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🧠</div>
+                <h4>Problem Solving</h4>
+                <p>حل المشكلات البرمجية وتطبيق هياكل البيانات والخوارزميات.</p>
+                <div class="skill-bar"><span data-width="75%"></span></div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🗄️</div>
+                <h4>SQL</h4>
+                <p>كتابة استعلامات SQL للتعامل مع قواعد البيانات.</p>
+                <div class="skill-bar"><span data-width="70%"></span></div>
+            </div>
+            <div class="skill-card reveal">
+                <div class="skill-icon">🧩</div>
+                <h4>Data Structures & OOP</h4>
+                <p>فهم هياكل البيانات ومبادئ البرمجة كائنية التوجه.</p>
+                <div class="skill-bar"><span data-width="75%"></span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects">
+        <h2 class="section-title reveal">مشاريعي <span>المميزة</span></h2>
+        <p class="section-sub reveal">بعض الأعمال اللي قمت بيها</p>
+        <div class="projects-grid">
+            <div class="project-card reveal">
+                <div class="project-img">🍕</div>
+                <div class="project-body">
+                    <h4>Pizza Restaurant</h4>
+                    <p>موقع لمطعم بيتزا بتصميم جذاب يعرض المنيو والعروض بطريقة بسيطة وسهلة الاستخدام.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                    </div>
+                    <a href="https://fatmaabdelraouf90-lab.github.io/Pizza/" target="_blank" class="project-link">
+                        زيارة الموقع ←
+                    </a>
+                </div>
+            </div>
+            <div class="project-card reveal">
+                <div class="project-img">💊</div>
+                <div class="project-body">
+                    <h4>Pharmacy Website</h4>
+                    <p>موقع لصيدلية بتصميم متجاوب يعرض المنتجات والخدمات بشكل منظم وواضح ومريح للعين.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        [10/15/2026 10:29 PM] Fatma Abd elraouf: <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">Bootstrap</span>
+                    </div>
+                    <a href="https://fatmaabdelraouf90-lab.github.io/Pharma/" target="_blank" class="project-link">
+                        زيارة الموقع ←
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+        <h2 class="section-title reveal">تواصلي <span>معي</span></h2>
+        <p class="section-sub reveal">يسعدني أتواصل معاك</p>
+        <div class="contact-wrap reveal">
+            <div class="contact-card">
+                <h3>هل عندك مشروع؟ 💼</h3>
+                <p>يسعدني أسمع فكرتك وأحولها لواقع. تقدري تتواصلي معايا من خلال:</p>
+                <div class="contact-links">
+                    <a href="mailto:fatmaabdelraouf90@gmail.com" class="contact-link">
+                        ✉️ الإيميل
+                    </a>
+                    <a href="https://www.linkedin.com/in/fatma-abdelraouf-7062112b3" target="_blank"
+                        class="contact-link">
+                        💼 LinkedIn
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        صُنع بـ <span class="heart">♥</span> بواسطة Fatma Abdelraouf © 2025
+    </footer>
+
+    <script>
+        // ===== Custom Cursor =====
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursorDot');
+        let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorDot.style.transform = ' translate(${mouseX - 3}px, ${mouseY - 3}px)';
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.transform = 'translate(${cursorX - 10} px, ${cursorY - 10}px)';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        document.querySelectorAll('a, button, .project-card, .skill-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ===== Typing Effect =====
+        const roles = ['Front-End Developer', 'UI Enthusiast', 'Web Designer', 'Problem Solver'];
+        let roleIndex = 0, charIndex = 0, isDeleting = false;
+        const typedEl = document.getElementById('typed');
+
+        function type() {
+            const current = roles[roleIndex];
+            if (isDeleting) {
+                typedEl.textContent = current.substring(0, charIndex--);
+            } else {
+                typedEl.textContent = current.substring(0, charIndex++);
+            }
+
+            if (!isDeleting && charIndex === current.length + 1) {
+                isDeleting = true;
+                setTimeout(type, 1500);
+                return;
+            }
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                roleIndex = (roleIndex + 1) % roles.length;
+            }
+            setTimeout(type, isDeleting ? 50 : 100);
+        }
+        type();
+
+        // ===== Scroll Reveal =====
+        const revealEls = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('active'), i * 80);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {threshold: 0.15});
+        revealEls.forEach(el => revealObserver.observe(el));
+
+        // ===== Skill Bars =====
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bar = entry.target.querySelector('.skill-bar span');
+                    if (bar) bar.style.width = bar.dataset.width;
+                    skillObserver.unobserve(entry.target);
+                }
+            });
+        }, {threshold: 0.3});
+        document.querySelectorAll('.skill-card').forEach(card => skillObserver.observe(card));
+
+        // ===== Navbar Scroll =====
+        const nav = document.getElementById('nav');
+        const progress = document.getElementById('progress');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+            const h = document.documentElement.scrollHeight - window.innerHeight;
+            progress.style.width = (window.scrollY / h) * 100 + '%';
+        });
+        // ===== Mobile Menu =====
+        const burger = document.getElementById('burger');
+        const navLinks = document.getElementById('navLinks');
+        burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+        navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+    </script>
+</body>
+
+</html>
+`
